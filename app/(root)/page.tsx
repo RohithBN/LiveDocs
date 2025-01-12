@@ -11,6 +11,7 @@ import { currentUser } from '@clerk/nextjs/server';
 import Link from 'next/link';
 import {DeleteModal} from '@/components/DeleteModal';
 import Notifications from '@/components/Notification';
+import { RoomData } from '@liveblocks/node';
 
 const Home = async() => {
   const clerkUser=await currentUser();
@@ -39,9 +40,9 @@ const Home = async() => {
             />
           </div>
           <ul className="document-ul">
-            {roomDocuments.data.map(({ id, metadata, createdAt }:{id:any,metadata:any,createdAt:any}) => (
-              <li key={id} className="document-list-item">
-                <Link href={`/documents/${id}`} className="flex flex-1 items-center gap-4">
+            {roomDocuments.data.map((document:RoomData) => (
+              <li key={document.id} className="document-list-item">
+                <Link href={`/documents/${document.id}`} className="flex flex-1 items-center gap-4">
                   <div className="hidden rounded-md bg-dark-500 p-2 sm:block">
                     <Image 
                       src="/assets/icons/doc.svg"
@@ -51,11 +52,11 @@ const Home = async() => {
                     />
                   </div>
                   <div className="space-y-1">
-                    <p className="line-clamp-1 text-lg">{metadata.title}</p>
-                    <p className="text-sm font-light text-blue-100">Created about {createdAt}</p>
+                    <p className="line-clamp-1 text-lg">{document.metadata.title}</p>
+                    <p className="text-sm font-light text-blue-100">Created about {document.createdAt.toLocaleString()}</p>
                   </div>
                 </Link>
-                <DeleteModal roomId={id}/>
+                <DeleteModal roomId={document.id}/>
               </li>
             ))}
           </ul>

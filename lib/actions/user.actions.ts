@@ -18,7 +18,7 @@ export const getClerkUsers = async ({ userIds }: { userIds: string[] }) => {
     }));
 
     const sortedUsers = userIds.map((email) =>
-      mappedUsers.find((user:any) => user.email === email)
+      mappedUsers.find((user) => user.email === email)
     );
 
     return JSON.parse(JSON.stringify(sortedUsers));

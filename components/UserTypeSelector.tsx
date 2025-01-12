@@ -4,13 +4,15 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-  } from "@/components/ui/select"
+  } from "@/components/ui/select";
   
   const UserTypeSelector = ({ userType, setUserType, onClickHandler }: UserTypeSelectorParams) => {
     const accessChangeHandler = (type: UserType) => {
       setUserType(type);
-      onClickHandler && onClickHandler(type);
-    }
+      if (onClickHandler) {
+        onClickHandler(type); // This makes the intent clearer and avoids the warning
+      }
+    };
   
     return (
       <Select value={userType} onValueChange={(type: UserType) => accessChangeHandler(type)}>
@@ -22,7 +24,8 @@ import {
           <SelectItem value="editor" className="shad-select-item">can edit</SelectItem>
         </SelectContent>
       </Select>
-    )
-  }
+    );
+  };
   
-  export default UserTypeSelector
+  export default UserTypeSelector;
+  
