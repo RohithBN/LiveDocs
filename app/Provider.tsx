@@ -3,12 +3,10 @@
 import { ReactNode } from "react";
 import {
   LiveblocksProvider,
-  RoomProvider,
   ClientSideSuspense,
 } from "@liveblocks/react/suspense";
 import Loader from "@/components/Loader";
 import { getClerkUsers, getDocumentUsers } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs/server";
 import { useUser } from "@clerk/nextjs";
 
 export function Provvider({ children }: { children: ReactNode }) {

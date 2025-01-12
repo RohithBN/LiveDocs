@@ -2,10 +2,10 @@
 
 import AddDocumentBtn from '@/components/AddDocumentBtn';
 import Header from '@/components/Header';
-import { SignedIn, UserButton, useUser } from '@clerk/nextjs';
+import { SignedIn, UserButton } from '@clerk/nextjs';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import React from 'react';
+import { redirect } from 'next/navigation';
 import { getDocuments } from '@/lib/actions/room.actions';
 import { currentUser } from '@clerk/nextjs/server';
 import Link from 'next/link';
@@ -39,7 +39,7 @@ const Home = async() => {
             />
           </div>
           <ul className="document-ul">
-            {roomDocuments.data.map(({ id, metadata, createdAt }: any) => (
+            {roomDocuments.data.map(({ id, metadata, createdAt }:{id:any,metadata:any,createdAt:any}) => (
               <li key={id} className="document-list-item">
                 <Link href={`/documents/${id}`} className="flex flex-1 items-center gap-4">
                   <div className="hidden rounded-md bg-dark-500 p-2 sm:block">

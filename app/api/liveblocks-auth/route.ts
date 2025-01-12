@@ -1,7 +1,6 @@
 import { liveblocks } from "@/lib/liveblocks";
 import { generateRandomColor } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs/server";
-import { Liveblocks } from "@liveblocks/node";
 import { redirect } from "next/navigation";
 
 

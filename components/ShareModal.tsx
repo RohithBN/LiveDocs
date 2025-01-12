@@ -16,7 +16,7 @@ import {
   import Collaborator from "./Collaborator";
   import UserTypeSelector from "./UserTypeSelector";
   
-  const ShareModal = ({ roomId, collaborators, creatorId, currentUserType }: ShareDocumentDialogProps) => {
+  const ShareModal = ({ roomId, collaborators, creatorId }: ShareDocumentDialogProps) => {
     const user = useSelf();
   
     const [open, setOpen] = useState(false);

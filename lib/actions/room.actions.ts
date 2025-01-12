@@ -3,7 +3,6 @@ import {nanoid} from 'nanoid';
 import { liveblocks } from '../liveblocks';
 import { revalidatePath } from 'next/cache';
 import { getAccessType } from '../utils';
-import { error } from 'console';
 import { clerkClient } from '@clerk/nextjs/server';
 export const createDocument=async({userId,email}:CreateDocumentParams)=>{
     const roomId=nanoid();
@@ -87,7 +86,6 @@ export const updateDocumentAccess=async({roomId,email,userType,updatedBy}:ShareD
         const userResponse = await client.users.getUserList({
           emailAddress: emailid, 
         });
-        const users=userResponse.data
         if (userResponse.data.length === 0) {
             return false;
           }
