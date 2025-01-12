@@ -9,58 +9,56 @@ import ActiveCollaborators from './ActiveCollaborators';
 import { Input } from './ui/input';
 import Image from 'next/image';
 import { updateDocument } from '@/lib/actions/room.actions';
+import Loader from './Loader';
+import ShareModal from './ShareModal';
 
-
-const CollaborativeRoom: React.FC<CollaborativeRoomProps> = ({ roomId, roomMetadata }) => {
-  const currentUserType = 'editor'; 
+const CollaborativeRoom: React.FC<CollaborativeRoomProps> = ({ roomId, roomMetadata, users, currentUserType }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(roomMetadata?.title || 'Untitled');
   const [isLoading, setIsLoading] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const prevTitleRef = useRef(title);
 
   // Handler for saving the title
-  const updateTitleHandler = async(e: React.KeyboardEvent<HTMLInputElement>) => {
-    try {
-      if (e.key === 'Enter') {
+  const updateTitleHandler = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && title !== prevTitleRef.current && !isLoading) {
+      try {
         setIsLoading(true);
-        if(title!==roomMetadata.title){
-          const updatedDocument=await updateDocument({roomId,title})
-          console.log(updateDocument)
-          setIsLoading(false);
-        }
+        prevTitleRef.current = title;  // Update ref to track the latest title
+        const updatedDocument = await updateDocument({ roomId, title });
+        console.log(updatedDocument); // You can add more specific logging here
+      } catch (error) {
+        console.error("Error trying to update title:", error);
+      } finally {
+        setIsLoading(false);
       }
-      
-    } catch (error) {
-      console.error(error,"Error trying to update titele");
-      
     }
-    finally{
-      setIsLoading(false);
-    }
-      
-    
   };
+
   useEffect(() => {
-    if(isEditing && inputRef.current){
+    if (isEditing && inputRef.current) {
       inputRef.current.focus();
     }
-  },[isEditing]);
+  }, [isEditing]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsEditing(false);
+        if (title !== prevTitleRef.current) {
+          updateDocument({ roomId, title });
+          prevTitleRef.current = title;
+        }
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [roomId, title]);
 
   if (!roomId) {
     return <div>Invalid room ID</div>;
@@ -69,13 +67,7 @@ const CollaborativeRoom: React.FC<CollaborativeRoomProps> = ({ roomId, roomMetad
   return (
     <div className="w-full min-h-screen">
       <RoomProvider id={roomId} initialPresence={{}}>
-        <ClientSideSuspense
-          fallback={
-            <div className="flex items-center justify-center min-h-screen w-full">
-              <p>Loading…</p>
-            </div>
-          }
-        >
+        <ClientSideSuspense fallback={<Loader />}>
           {() => (
             <>
               <Header>
@@ -111,6 +103,7 @@ const CollaborativeRoom: React.FC<CollaborativeRoomProps> = ({ roomId, roomMetad
                 </div>
                 <div className="flex w-full flex-1 justify-end gap-2 sm:gap-3">
                   <ActiveCollaborators />
+                  <ShareModal roomId={roomId} collaborators={users} creatorId={roomMetadata.creatorId} currentUserType={currentUserType}/>
                   <SignedOut>
                     <SignInButton />
                   </SignedOut>
@@ -120,7 +113,7 @@ const CollaborativeRoom: React.FC<CollaborativeRoomProps> = ({ roomId, roomMetad
                 </div>
               </Header>
               <div className="w-full">
-                <Editor />
+                <Editor roomId={roomId} currentUserType={currentUserType} />
               </div>
             </>
           )}

@@ -14,18 +14,17 @@ export async function POST(request: Request) {
     id: clerkUser.id,
     info:{
         id:clerkUser.id,
-        name:clerkUser.username || "Anonymous",
+        name: clerkUser.fullName || "",
         email:clerkUser.emailAddresses[0].emailAddress,
         avatar:clerkUser.imageUrl,
         colour: generateRandomColor(), 
     }
   }
 
-  // Identify the user and return the result
   const { status, body } = await liveblocks.identifyUser(
     {
       userId: user.info.email,
-      groupIds:[], // Optional
+      groupIds:[],
     },
     { userInfo: user.info },
   );

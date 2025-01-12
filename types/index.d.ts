@@ -26,7 +26,7 @@ declare type SearchParamProps = {
     name: string;
     email: string;
     avatar: string;
-    color: string;
+    color?: string;
     userType?: UserType;
   };
   
@@ -66,7 +66,8 @@ declare type SearchParamProps = {
   declare type CollaborativeRoomProps = {
     roomId: string;
     roomMetadata: RoomMetadata;
-   
+    users: User[];
+    currentUserType: UserType;
   };
   
   declare type AddDocumentBtnProps = {

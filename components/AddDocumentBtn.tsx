@@ -26,7 +26,7 @@ const AddDocumentBtn: React.FC<AddDocumentBtnProps> = ({ userId, email }) => {
   };
 
   return (
-    <Button type="submit" onClick={addDocumentHandler} className="gradient-blue flex gap-1 shadow-md">
+    <Button type="submit" onClick={addDocumentHandler} className="gradient-blue flex gap-1 mt-4 ml-20 shadow-md">
       <Image 
         src="/assets/icons/add.svg" alt="add" width={24} height={24}
       />
